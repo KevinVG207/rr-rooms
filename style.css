@@ -1,0 +1,29 @@
+* {
+    font-family: sans-serif;
+}
+
+table {
+    white-space: pre;
+    font-size: 1.2rem;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+th, td {
+    text-align: center;
+    border: 1px solid black;
+    padding: 0 1rem;
+}
+
+.room-header {
+    padding-top: 1rem;
+}
+
+.mii {
+    height: 2rem;
+    width: auto;
+}
+
+.mii-name {
+    font-family: 'CTMKF', sans-serif;
+}

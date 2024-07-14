@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Retro Rewind Rooms Viewer</title>
+        <meta name="description" content="description"/>
+        <meta name="author" content="KevinVG207" />
+        <meta name="keywords" content="keywords" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon" />
+        <link rel="stylesheet" href="./style.css" type="text/css" />
+        <link href="http://www.chadsoft.co.uk/css/ctmkf.css" rel="Stylesheet" type="text/css" />
+    </head>
+    <body>
+        <table>
+            <tbody id="tablebody"></tbody>
+        </table>
+        <script type="text/javascript">
+            var observer_options = {
+                root: document.documentElement
+            }
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const mii_data = entry.target.getAttribute("data-mii");
+                        async_fetch_mii(mii_data, entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observer_options);
+
+            async function async_fetch_mii(mii_data, mii_element) {
+                var req = new XMLHttpRequest();
+                req.onload = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // Response text is base64 encoded image
+                        const b64 = this.responseText.slice(1, -2);
+                        const mii_data = atob( b64 );
+                        const mii_url = "data:image/png;base64," + b64;
+
+                        mii_element.src = mii_url;
+                    }
+                }
+
+                req.open("POST", "https://umapyoi.net/api/v1/mii");
+                var bodyString = JSON.stringify({"data": mii_data});
+                req.send(bodyString);
+                console.log("Sent request for mii data")
+            }
+
+            async function autorun() {
+                const response = await fetch("http://zplwii.xyz/api/groups");
+    
+                if (!response.ok){
+                    console.log("Error fetching room data from zplwii.xyz");
+                    return;
+                }
+
+
+                const rooms = await response.json();
+                console.log(rooms);
+
+                const tbody = document.getElementById("tablebody");
+
+
+
+                for (const room of rooms) {
+                    // Room Info
+                    let tr = document.createElement("tr");
+                    let th = document.createElement("th");
+                    th.colSpan = 6;
+                    th.classList.add("room-header");
+                    let room_type = room.type == "anybody" ? "Public" : "Private";
+                    let created = new Date(room.created);
+                    let minutes_since = Math.floor((Date.now() - created) / 60000);
+                    let hours_since = Math.floor(minutes_since / 60);
+                    let final_time = minutes_since;
+                    let format = "m"
+                    if (minutes_since > 60) {
+                        format = "h"
+                        final_time = hours_since;
+                    }
+
+                    th.textContent = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room ${room.id} | Uptime: ${final_time}${format}`;
+                    tr.appendChild(th);
+                    tbody.appendChild(tr);
+
+                    // Data Headers
+                    tr = document.createElement("tr");
+                    tbody.appendChild(tr);
+                    
+                    // Mii Name
+                    th = document.createElement("th");
+                    th.textContent = "Mii Name";
+                    tr.appendChild(th);
+
+                    // Friend Code
+                    th = document.createElement("th");
+                    th.textContent = "Friend Code";
+                    tr.appendChild(th);
+
+                    // // Mii
+                    // th = document.createElement("th");
+                    // th.textContent = "Mii";
+                    // tr.appendChild(th);
+
+                    // Connection fail
+                    th = document.createElement("th");
+                    th.textContent = "Conn.\r\nFail";
+                    tr.appendChild(th);
+
+                    // VR
+                    th = document.createElement("th");
+                    th.textContent = "VR";
+                    tr.appendChild(th);
+
+                    // BR
+                    th = document.createElement("th");
+                    th.textContent = "BR";
+                    tr.appendChild(th);
+
+
+                    // Players
+                    for (const player_idx of Object.keys(room.players)) {
+                        tr = document.createElement("tr");
+                        tbody.appendChild(tr);
+                        
+                        const player = room.players[player_idx];
+
+                        // Mii Name
+                        let td = document.createElement("td");
+                        td.classList.add("mii-name");
+                        td.textContent = player.mii[0].name;
+                        tr.appendChild(td);
+
+                        // Friend Code
+                        td = document.createElement("td");
+                        td.textContent = player.fc;
+                        if (player_idx == room.host){
+                            td.style.fontWeight = "bold";
+                        }
+                        tr.appendChild(td);
+
+                        // // Mii
+                        // td = document.createElement("td");
+                        // img = document.createElement("img");
+                        // img.classList.add("mii");
+                        // img.setAttribute("data-mii", player.mii[0].data);
+                        // td.appendChild(img);
+                        // observer.observe(img);
+
+                        // // async_fetch_mii(player.mii[0].data, td);
+                        // tr.appendChild(td);
+
+                        // Connection fail
+                        td = document.createElement("td");
+                        td.textContent = player.conn_fail;
+                        tr.appendChild(td);
+
+                        // VR
+                        td = document.createElement("td");
+                        td.textContent = player.ev;
+                        tr.appendChild(td);
+
+                        // BR
+                        td = document.createElement("td");
+                        td.textContent = player.eb;
+                        tr.appendChild(td);
+                    }
+                }
+            }
+            if (document.addEventListener)
+                document.addEventListener('DOMContentLoaded', autorun, false)
+            else window.onload = autorun
+        </script>
+    </body>
+</html>
