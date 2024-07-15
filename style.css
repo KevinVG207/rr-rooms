@@ -18,6 +18,8 @@ th, td {
 
 .room-header {
     padding-top: 1rem;
+    border-right: none;
+    border-left: none;
 }
 
 .mii {
