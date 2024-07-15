@@ -36,6 +36,9 @@
             function on_checkbox(){
                 if (document.getElementById("timeout-checkbox").checked){
                     RELOAD = true;
+                    if (RELOAD_TIMER){
+                        clearInterval(RELOAD_TIMER);
+                    }
                     RELOAD_TIMER = setInterval(autorun, RELOAD_TIME);
                 } else {
                     RELOAD = false;
@@ -319,6 +322,9 @@
                 }
 
                 if (RELOAD) {
+                    if (RELOAD_TIMER){
+                        clearInterval(RELOAD_TIMER);
+                    }
                     RELOAD_TIMER = setInterval(autorun, RELOAD_TIME);
                 }
 
