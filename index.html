@@ -11,7 +11,8 @@
         <link href="./ctmkf.css" rel="Stylesheet" type="text/css" />
     </head>
     <body>
-        <div id="loading">Fetching rooms. Please wait...</div>
+        <h1><a href="?" id="home-link">Retro Rewind Room Viewer</a></h1>
+        <div id="loading">Fetching data. Please wait...</div>
         <div id="top-container"><span>No. of rooms: <span id="no-rooms" class="top-stat">0</span></span><span>No. of players: <span id="no-players" class="top-stat">0</span></span></div>
         <table>
             <tbody id="tablebody"></tbody>
@@ -36,9 +37,18 @@
 
                 const tbody = document.getElementById("tablebody");
 
+                const url = new URL(window.location.href);
+                const params = url.searchParams;
+                const filter_room = params.get("room");
+                let room_not_found = true;
 
 
                 for (const room of rooms) {
+                    if (filter_room && room.id != filter_room){
+                        continue;
+                    }
+                    room_not_found = false;
+
                     // Room Info
                     let tr = document.createElement("tr");
                     let th = document.createElement("th");
@@ -55,7 +65,7 @@
                         final_time = hours_since;
                     }
 
-                    th.textContent = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room ${room.id} | Uptime: ${final_time}${format}`;
+                    th.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> | Uptime: ${final_time}${format}`;
                     tr.appendChild(th);
                     tbody.appendChild(tr);
 
@@ -147,11 +157,18 @@
                         tr.appendChild(td);
                     }
 
-                    document.querySelector("#no-rooms").textContent = rooms.length;
-                    document.querySelector("#no-players").textContent = no_players;
-
                     document.querySelector("#loading").style.display = "none";
-                    document.querySelector("#top-container").style.display = "flex";
+                    if (!filter_room){
+                        document.querySelector("#no-rooms").textContent = rooms.length;
+                        document.querySelector("#no-players").textContent = no_players;
+
+                        document.querySelector("#top-container").style.display = "flex";
+                    }
+
+                    if (room_not_found){
+                        document.querySelector("#top-container").style.display = "flex";
+                        document.querySelector("#top-container").innerHTML = "<span>Specified room has closed or does not exist.</span>";
+                    }
                 }
 
                 // Fetch Mii images
