@@ -49,6 +49,7 @@ th, td {
 
 .conn-fail {
     padding: 0 0.1rem;
+    font-size: 1rem;
 }
 
 #loading {
@@ -95,7 +96,7 @@ h1 {
     }
 
     th, td {
-        padding: 0 0.5rem;
+        padding: 0 0.4rem;
     }
 
     .mii {
@@ -104,5 +105,9 @@ h1 {
 
     h1 {
         font-size: 1.5rem;
+    }
+
+    .conn-fail {
+        font-size: 0.75rem;
     }
 }
