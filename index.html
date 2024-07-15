@@ -2,9 +2,9 @@
 <html>
     <head>
         <title>Retro Rewind Rooms Viewer</title>
-        <meta name="description" content="description"/>
+        <meta name="description" content="View rooms and players currently playing Retro Rewind, a custom track distribution for Mario Kart Wii by ZPL."/>
         <meta name="author" content="KevinVG207" />
-        <meta name="keywords" content="keywords" />
+        <meta name="keywords" content="mario kart wii, mkwii, retro rewind, zpl, rooms, online, multiplayer, ctgp" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon" />
         <link rel="stylesheet" href="./style.css" type="text/css" />
@@ -16,6 +16,9 @@
         <table>
             <tbody id="tablebody"></tbody>
         </table>
+        <p>Retro Rewind is a custom track distribution for Mario Kart Wii, created by ZPL. Learn more on the <a href="https://wiki.tockdom.com/wiki/Retro_Rewind" target="_blank">Custom Mario Kart Wiiki page.</a></p>
+        <p>This webpage is created by <a href="https://github.com/KevinVG207" target="_blank">KevinVG207</a></p>
+        <p>Room data taken from <a href="http://zplwii.xyz/api/groups" target="_blank">this</a> API endpoint.</p>
         <script type="text/javascript">
             async function autorun() {
                 const response = await fetch("https://umapyoi.net/api/v1/rr-rooms");
