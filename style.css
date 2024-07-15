@@ -42,6 +42,14 @@ th, td {
     font-family: 'CTMKF', sans-serif;
 }
 
+.data-header {
+    background-color: lightgray;
+}
+
+.conn-fail {
+    padding: 0 0.1rem;
+}
+
 #loading {
     font-weight: bold;
     font-size: 2rem;

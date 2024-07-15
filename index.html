@@ -183,6 +183,7 @@
 
                     // Data Headers
                     tr = document.createElement("tr");
+                    tr.classList.add("data-header");
                     tbody.appendChild(tr);
                     
                     // Mii Name
@@ -202,7 +203,8 @@
 
                     // Connection fail
                     th = document.createElement("th");
-                    th.textContent = "Conn.\r\nFail";
+                    th.textContent = "Conn\r\nFail";
+                    th.classList.add("conn-fail");
                     tr.appendChild(th);
 
                     // VR
