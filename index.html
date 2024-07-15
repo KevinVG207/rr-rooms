@@ -23,7 +23,7 @@
         <p><a href="https://wiki.tockdom.com/wiki/CTMKF" target="_blank">Chadderz's Terrible Mario Kart Font</a> is used for the Mii name special symbols.</p>
         <script type="text/javascript">
             const MAX_MIIS_PER_REQUEST = 24;
-            const EXPIRE_TIME = 86400000; // 24 hours
+            const EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 1 week
 
             // Miis are stored as key "mii_{data}": "[image, datetime]"
             function remove_expired_mii_images(){
