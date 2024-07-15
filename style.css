@@ -3,6 +3,7 @@
 }
 
 table {
+    margin-top: 1rem;
     white-space: pre;
     font-size: 1.2rem;
     border-collapse: collapse;
@@ -26,4 +27,20 @@ th, td {
 
 .mii-name {
     font-family: 'CTMKF', sans-serif;
+}
+
+#loading {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+#top-container {
+    display: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+    gap: 1rem;
+}
+
+.top-stat {
+    font-weight: normal;
 }

@@ -11,6 +11,8 @@
         <link href="./ctmkf.css" rel="Stylesheet" type="text/css" />
     </head>
     <body>
+        <div id="loading">Fetching data and Miis. Please wait...</div>
+        <div id="top-container"><span>No. of rooms: <span id="no-rooms" class="top-stat">0</span></span><span>No. of players: <span id="no-players" class="top-stat">0</span></span></div>
         <table>
             <tbody id="tablebody"></tbody>
         </table>
@@ -25,6 +27,7 @@
 
 
                 const rooms = await response.json();
+                let no_players = 0;
                 console.log(rooms);
 
                 const tbody = document.getElementById("tablebody");
@@ -89,6 +92,8 @@
 
                     // Players
                     for (const player_idx of Object.keys(room.players)) {
+                        no_players++;
+
                         tr = document.createElement("tr");
                         tbody.appendChild(tr);
                         
@@ -135,6 +140,12 @@
                         td.textContent = player.eb;
                         tr.appendChild(td);
                     }
+
+                    document.querySelector("#no-rooms").textContent = rooms.length;
+                    document.querySelector("#no-players").textContent = no_players;
+
+                    document.querySelector("#loading").style.display = "none";
+                    document.querySelector("#top-container").style.display = "flex";
                 }
             }
             if (document.addEventListener)
