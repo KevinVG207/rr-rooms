@@ -157,18 +157,20 @@
                         tr.appendChild(td);
                     }
 
-                    document.querySelector("#loading").style.display = "none";
-                    if (!filter_room){
-                        document.querySelector("#no-rooms").textContent = rooms.length;
-                        document.querySelector("#no-players").textContent = no_players;
+                }
 
-                        document.querySelector("#top-container").style.display = "flex";
-                    }
+                document.querySelector("#loading").style.display = "none";
+                if (!filter_room){
+                    document.querySelector("#no-rooms").textContent = rooms.length;
+                    document.querySelector("#no-players").textContent = no_players;
 
-                    if (room_not_found){
-                        document.querySelector("#top-container").style.display = "flex";
-                        document.querySelector("#top-container").innerHTML = "<span>Specified room has closed or does not exist.</span>";
-                    }
+                    document.querySelector("#top-container").style.display = "flex";
+                }
+
+                if (room_not_found){
+                    document.querySelector("#top-container").style.display = "flex";
+                    document.querySelector("#top-container").innerHTML = "<span style=\"color:red;\">Specified room has closed or does not exist.</span>";
+                    return;
                 }
 
                 // Fetch Mii images
@@ -178,29 +180,31 @@
                     mii_data_list.push(mii_element.getAttribute("mii-data"));
                 }
 
-                const mii_data_response = await fetch("https://umapyoi.net/api/v1/mii", {
-                    method: "POST",
-                    body: JSON.stringify(mii_data_list)
-                });
+                if (mii_data_list.length > 0){
+                    const mii_data_response = await fetch("https://umapyoi.net/api/v1/mii", {
+                        method: "POST",
+                        body: JSON.stringify(mii_data_list)
+                    });
 
-                if (!mii_data_response.ok){
-                    console.log("Error fetching Mii data from umapyoi.net");
-                    return;
-                }
-
-                const mii_dict = await mii_data_response.json();
-
-                // console.log(mii_dict);
-
-                for (const mii_element of mii_elements){
-                    const mii_data = mii_element.getAttribute("mii-data");
-
-                    if (!(Object.keys(mii_dict).includes(mii_data))){
-                        continue;
+                    if (!mii_data_response.ok){
+                        console.log("Error fetching Mii data from umapyoi.net");
+                        return;
                     }
-                    
-                    const mii_image = mii_dict[mii_data]
-                    mii_element.src = mii_image;
+
+                    const mii_dict = await mii_data_response.json();
+
+                    // console.log(mii_dict);
+
+                    for (const mii_element of mii_elements){
+                        const mii_data = mii_element.getAttribute("mii-data");
+
+                        if (!(Object.keys(mii_dict).includes(mii_data))){
+                            continue;
+                        }
+                        
+                        const mii_image = mii_dict[mii_data]
+                        mii_element.src = mii_image;
+                    }
                 }
             }
             if (document.addEventListener)
