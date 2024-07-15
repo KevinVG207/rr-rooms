@@ -74,13 +74,15 @@
             function apply_mii_image(mii_data, mii_image){
                 set_cached_mii_image(mii_data, mii_image);
 
-                const mii_element = document.querySelector(`img[mii-data="${mii_data}"]`)
+                const mii_elements = document.querySelectorAll(`img[mii-data="${mii_data}"]`)
 
-                if (!mii_element){
+                if (!mii_elements){
                     return;
                 }
 
-                mii_element.src = mii_image;
+                for (const mii_element of mii_elements){
+                    mii_element.src = mii_image;
+                }
             }
 
             async function fetch_mii_images(mii_data_list){
