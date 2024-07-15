@@ -32,7 +32,7 @@
 
                 const rooms = await response.json();
                 let no_players = 0;
-                console.log(rooms);
+                // console.log(rooms);
 
                 const tbody = document.getElementById("tablebody");
 
@@ -173,7 +173,7 @@
 
                 const mii_dict = await mii_data_response.json();
 
-                console.log(mii_dict);
+                // console.log(mii_dict);
 
                 for (const mii_element of mii_elements){
                     const mii_data = mii_element.getAttribute("mii-data");
