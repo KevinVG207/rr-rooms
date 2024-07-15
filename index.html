@@ -102,7 +102,7 @@
 
                 if (new_mii_data_list.length > MAX_MIIS_PER_REQUEST){
                     const mii_data_list_copy = new_mii_data_list.slice();
-                    mii_data_list = mii_data_list_copy.splice(0, MAX_MIIS_PER_REQUEST);
+                    new_mii_data_list = mii_data_list_copy.splice(0, MAX_MIIS_PER_REQUEST);
                     fetch_mii_images(mii_data_list_copy);
                 }
 
