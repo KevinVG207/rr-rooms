@@ -7,6 +7,7 @@
         <meta name="keywords" content="mario kart wii, mkwii, retro rewind, zpl, rooms, online, multiplayer, ctgp" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <!-- <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon" /> -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/reset-css@5.0.1/reset.css" /> -->
         <link rel="stylesheet" href="./style.css" type="text/css" />
         <link href="./ctmkf.css" rel="Stylesheet" type="text/css" />
     </head>
@@ -175,7 +176,8 @@
                         final_time = hours_since;
                     }
 
-                    th.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> | Uptime: ${final_time}${format}`;
+                    let no_players = Object.keys(room.players).length;
+                    th.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> | Uptime: ${final_time}${format} | ${no_players} player${no_players == 1 ? "" : "s"}`;
                     tr.appendChild(th);
                     tbody.appendChild(tr);
 

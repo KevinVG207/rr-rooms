@@ -1,9 +1,18 @@
 * {
     font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    padding: 0.5rem;
+}
+
+p {
+    margin-bottom: 0.2rem;
 }
 
 table {
-    margin-top: 1rem;
     white-space: pre;
     font-size: 1.2rem;
     border-collapse: collapse;
@@ -20,6 +29,7 @@ th, td {
     padding-top: 1rem;
     border-right: hidden;
     border-left: hidden;
+    padding-bottom: 0.2rem;
 }
 
 .mii {
