@@ -119,16 +119,17 @@
 
                         // Mii
                             td = document.createElement("td");
-                            if ('mii' in player){
-                                // img = document.createElement("img");
-                                // img.width = 64;
-                                // img.height = 64;
-                                // img.classList.add("mii");
-                                // img.src = player.mii[0].image;
-                                // td.appendChild(img);
-                                td.setAttribute("mii-data", player.mii[0].data);
-                            }
+                            img = document.createElement("img");
+                            img.width = 64;
+                            img.height = 64;
+                            img.classList.add("mii");
+                            img.src = "empty.png";
+                            td.appendChild(img);
                             tr.appendChild(td);
+
+                            if ('mii' in player){
+                                img.setAttribute("mii-data", player.mii[0].data);
+                            }
 
                         // Connection fail
                         td = document.createElement("td");
@@ -172,20 +173,17 @@
 
                 const mii_dict = await mii_data_response.json();
 
-                for (const mii_element of mii_elements){
-                    const mii_data = mii_dict[mii_element.getAttribute("mii-data")];
+                console.log(mii_dict);
 
-                    if (!(mii_data in Object.keys(mii_dict))){
+                for (const mii_element of mii_elements){
+                    const mii_data = mii_element.getAttribute("mii-data");
+
+                    if (!(Object.keys(mii_dict).includes(mii_data))){
                         continue;
                     }
                     
                     const mii_image = mii_dict[mii_data]
-                    const img = document.createElement("img");
-                    img.width = 64;
-                    img.height = 64;
-                    img.classList.add("mii");
-                    img.src = mii_image;
-                    mii_element.appendChild(img);
+                    mii_element.src = mii_image;
                 }
             }
             if (document.addEventListener)
