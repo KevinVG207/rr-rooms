@@ -39,8 +39,27 @@ th, td {
     font-weight: bold;
     font-size: 1.5rem;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .top-stat {
     font-weight: normal;
+}
+
+@media (max-width: 720px) {
+    #top-container {
+        justify-content: center;
+    }
+
+    table {
+        font-size: 0.8rem;
+    }
+
+    th, td {
+        padding: 0 0.5rem;
+    }
+
+    .mii {
+        height: 1.5rem;
+    }
 }
