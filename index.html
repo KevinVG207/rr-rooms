@@ -11,7 +11,7 @@
         <link href="./ctmkf.css" rel="Stylesheet" type="text/css" />
     </head>
     <body>
-        <div id="loading">Fetching rooms and Miis. Please wait...</div>
+        <div id="loading">Fetching rooms. Please wait...</div>
         <div id="top-container"><span>No. of rooms: <span id="no-rooms" class="top-stat">0</span></span><span>No. of players: <span id="no-players" class="top-stat">0</span></span></div>
         <table>
             <tbody id="tablebody"></tbody>
@@ -120,12 +120,13 @@
                         // Mii
                             td = document.createElement("td");
                             if ('mii' in player){
-                                img = document.createElement("img");
-                                img.width = 64;
-                                img.height = 64;
-                                img.classList.add("mii");
-                                img.src = player.mii[0].image;
-                                td.appendChild(img);
+                                // img = document.createElement("img");
+                                // img.width = 64;
+                                // img.height = 64;
+                                // img.classList.add("mii");
+                                // img.src = player.mii[0].image;
+                                // td.appendChild(img);
+                                td.setAttribute("mii-data", player.mii[0].data);
                             }
                             tr.appendChild(td);
 
@@ -150,6 +151,41 @@
 
                     document.querySelector("#loading").style.display = "none";
                     document.querySelector("#top-container").style.display = "flex";
+                }
+
+                // Fetch Mii images
+                const mii_elements = document.querySelectorAll("[mii-data]");
+                let mii_data_list = [];
+                for (const mii_element of mii_elements){
+                    mii_data_list.push(mii_element.getAttribute("mii-data"));
+                }
+
+                const mii_data_response = await fetch("https://umapyoi.net/api/v1/mii", {
+                    method: "POST",
+                    body: JSON.stringify(mii_data_list)
+                });
+
+                if (!mii_data_response.ok){
+                    console.log("Error fetching Mii data from umapyoi.net");
+                    return;
+                }
+
+                const mii_dict = await mii_data_response.json();
+
+                for (const mii_element of mii_elements){
+                    const mii_data = mii_dict[mii_element.getAttribute("mii-data")];
+
+                    if (!(mii_data in Object.keys(mii_dict))){
+                        continue;
+                    }
+                    
+                    const mii_image = mii_dict[mii_data]
+                    const img = document.createElement("img");
+                    img.width = 64;
+                    img.height = 64;
+                    img.classList.add("mii");
+                    img.src = mii_image;
+                    mii_element.appendChild(img);
                 }
             }
             if (document.addEventListener)
