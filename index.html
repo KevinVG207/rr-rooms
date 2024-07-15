@@ -176,8 +176,8 @@
                         final_time = hours_since;
                     }
 
-                    let no_players = Object.keys(room.players).length;
-                    th.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> | Uptime: ${final_time}${format} | ${no_players} player${no_players == 1 ? "" : "s"}`;
+                    let room_no_players = Object.keys(room.players).length;
+                    th.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> | Uptime: ${final_time}${format} | ${room_no_players} player${room_no_players == 1 ? "" : "s"}`;
                     tr.appendChild(th);
                     tbody.appendChild(tr);
 
