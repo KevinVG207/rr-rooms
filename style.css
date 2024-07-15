@@ -6,6 +6,11 @@
 
 body {
     padding: 0.5rem;
+    /* center */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 p {

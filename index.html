@@ -13,6 +13,10 @@
     </head>
     <body>
         <h1><a href="?" id="home-link">Retro Rewind Room Browser</a></h1>
+        <div id="settings">
+            <label for="timeout-checkbox">Auto-reload</label>
+            <input type="checkbox" id="timeout-checkbox" onchange="on_checkbox()" />
+        </div>
         <div id="loading">Fetching data. Please wait...</div>
         <div id="top-container"><span>No. of rooms: <span id="no-rooms" class="top-stat">0</span></span><span>No. of players: <span id="no-players" class="top-stat">0</span></span></div>
         <table>
@@ -25,6 +29,21 @@
         <script type="text/javascript">
             const MAX_MIIS_PER_REQUEST = 24;
             const EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 1 week
+            const RELOAD_TIME = 1000 * 10; // 10 seconds
+            let RELOAD = false;
+            let RELOAD_TIMER = null;
+
+            function on_checkbox(){
+                if (document.getElementById("timeout-checkbox").checked){
+                    RELOAD = true;
+                    RELOAD_TIMER = setInterval(autorun, RELOAD_TIME);
+                } else {
+                    RELOAD = false;
+                    if (RELOAD_TIMER){
+                        clearInterval(RELOAD_TIMER);
+                    }
+                }
+            }
 
             // Miis are stored as key "mii_{data}": "[image, datetime]"
             function remove_expired_mii_images(){
@@ -147,6 +166,8 @@
                 // console.log(rooms);
 
                 const tbody = document.getElementById("tablebody");
+                // Clear table
+                tbody.innerHTML = "";
 
                 const url = new URL(window.location.href);
                 const params = url.searchParams;
@@ -294,6 +315,10 @@
 
                 for (const img_element of document.querySelectorAll("img[mii-data]")){
                     mii_data_list.push(img_element.getAttribute("mii-data"));
+                }
+
+                if (RELOAD) {
+                    RELOAD_TIMER = setInterval(autorun, RELOAD_TIME);
                 }
 
                 fetch_mii_images(mii_data_list);
