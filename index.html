@@ -201,6 +201,7 @@
                         final_time = hours_since;
                     }
                     let detailed_uptime = `${hours_since}h ${minutes_since % 60}m`;
+                    let joinable = room.suspend ? "Not joinable" : "Joinable";
 
                     let room_no_players = 0;
                     tr.appendChild(room_header);
@@ -329,7 +330,7 @@
                     }
 
                     // Apply the room header text.
-                    room_header.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> | <span title="${detailed_uptime}">Uptime: ${final_time}${format}</span> | ${room_no_players} player${room_no_players == 1 ? "" : "s"}`;
+                    room_header.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> – <span title="${detailed_uptime}">Uptime: ${final_time}${format}</span>\r\n${room_no_players} player${room_no_players == 1 ? "" : "s"} – ${joinable}`;
 
                 }
 
