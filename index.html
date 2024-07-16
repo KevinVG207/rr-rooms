@@ -187,9 +187,9 @@
 
                     // Room Info
                     let tr = document.createElement("tr");
-                    let th = document.createElement("th");
-                    th.colSpan = 100;
-                    th.classList.add("room-header");
+                    let room_header = document.createElement("th");
+                    room_header.colSpan = 100;
+                    room_header.classList.add("room-header");
                     let room_type = room.type == "anybody" ? "Public" : "Private";
                     let created = new Date(room.created);
                     let minutes_since = Math.floor((Date.now() - created) / 60000);
@@ -201,9 +201,8 @@
                         final_time = hours_since;
                     }
 
-                    let room_no_players = Object.keys(room.players).length;
-                    th.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> | Uptime: ${final_time}${format} | ${room_no_players} player${room_no_players == 1 ? "" : "s"}`;
-                    tr.appendChild(th);
+                    let room_no_players = 0;
+                    tr.appendChild(room_header);
                     tbody.appendChild(tr);
 
                     // Data Headers
@@ -217,21 +216,21 @@
                     th.colSpan = 2;
                     tr.appendChild(th);
 
-                    // Friend Code
-                    th = document.createElement("th");
-                    th.textContent = "Friend Code";
-                    tr.appendChild(th);
-
                     // Mii
                     th = document.createElement("th");
                     th.textContent = "Mii";
                     tr.appendChild(th);
 
-                    // Connection fail
+                    // Friend Code
                     th = document.createElement("th");
-                    th.textContent = "Conn\r\nFail";
-                    th.classList.add("conn-fail");
+                    th.textContent = "Friend Code";
                     tr.appendChild(th);
+
+                    // // Connection fail
+                    // th = document.createElement("th");
+                    // th.textContent = "Conn\r\nFail";
+                    // th.classList.add("conn-fail");
+                    // tr.appendChild(th);
 
                     // VR
                     th = document.createElement("th");
@@ -255,6 +254,7 @@
 
                         for (let cur_mii_idx = 0; cur_mii_idx < no_miis; cur_mii_idx++){
                             no_players++;
+                            room_no_players++;
 
                             tr = document.createElement("tr");
                             tbody.appendChild(tr);
@@ -282,32 +282,32 @@
                                 tr.appendChild(name_ele);
                             }
 
+                            // Mii
+                            td = document.createElement("td");
+                            img = document.createElement("img");
+                            img.width = 64;
+                            img.height = 64;
+                            img.classList.add("mii");
+                            img.src = "empty.png";
+                            td.appendChild(img);
+                            tr.appendChild(td);
+
+                            if ('mii' in player){
+                                img.setAttribute("mii-data", player.mii[cur_mii_idx].data);
+                            }
+
                             // Friend Code
                             td = document.createElement("td");
                             td.textContent = cur_mii_idx == 0 ? player.fc : "Guest";
-                            if (player_idx == room.host){
+                            if (cur_mii_idx == 0 && player_idx == room.host){
                                 td.style.fontWeight = "bold";
                             }
                             tr.appendChild(td);
 
-                            // Mii
-                                td = document.createElement("td");
-                                img = document.createElement("img");
-                                img.width = 64;
-                                img.height = 64;
-                                img.classList.add("mii");
-                                img.src = "empty.png";
-                                td.appendChild(img);
-                                tr.appendChild(td);
-
-                                if ('mii' in player){
-                                    img.setAttribute("mii-data", player.mii[cur_mii_idx].data);
-                                }
-
-                            // Connection fail
-                            td = document.createElement("td");
-                            td.textContent = cur_mii_idx == 0 ? player.conn_fail : "--";
-                            tr.appendChild(td);
+                            // // Connection fail
+                            // td = document.createElement("td");
+                            // td.textContent = cur_mii_idx == 0 ? player.conn_fail : "--";
+                            // tr.appendChild(td);
 
                             // VR
                             td = document.createElement("td");
@@ -322,6 +322,9 @@
                         
 
                     }
+
+                    // Apply the room header text.
+                    room_header.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> | Uptime: ${final_time}${format} | ${room_no_players} player${room_no_players == 1 ? "" : "s"}`;
 
                 }
 
