@@ -187,7 +187,7 @@
                     let room_header = document.createElement("th");
                     room_header.colSpan = 100;
                     room_header.classList.add("room-header");
-                    let room_type = room.type == "anybody" ? "Public" : "Private";
+                    let room_type = room.type == "anybody" ? "🌎Public" : "🔒Private";
                     let created = new Date(room.created);
                     let minutes_since = Math.floor((Date.now() - created) / 60000);
                     let hours_since = Math.floor(minutes_since / 60);
