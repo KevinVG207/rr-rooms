@@ -30,18 +30,15 @@
             const MAX_MIIS_PER_REQUEST = 24;
             const EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 1 week
             const RELOAD_TIME = 1000 * 10; // 10 seconds
-            let RELOAD = false;
             let RELOAD_TIMER = null;
 
             function on_checkbox(){
                 if (document.getElementById("timeout-checkbox").checked){
-                    RELOAD = true;
                     if (RELOAD_TIMER){
                         clearInterval(RELOAD_TIMER);
                     }
                     RELOAD_TIMER = setInterval(autorun, RELOAD_TIME);
                 } else {
-                    RELOAD = false;
                     if (RELOAD_TIMER){
                         clearInterval(RELOAD_TIMER);
                     }
@@ -202,6 +199,7 @@
                     }
                     let detailed_uptime = `${hours_since}h ${minutes_since % 60}m`;
                     let joinable = room.suspend ? "Not joinable" : "Joinable";
+                    let joinable_class = room.suspend ? "not-joinable" : "joinable";
 
                     let room_no_players = 0;
                     tr.appendChild(room_header);
@@ -305,9 +303,9 @@
                             // Friend Code
                             td = document.createElement("td");
                             td.textContent = cur_mii_idx == 0 ? player.fc : "Guest";
-                            if (cur_mii_idx == 0 && player_idx == room.host){
-                                td.style.fontWeight = "bold";
-                            }
+                            // if (cur_mii_idx == 0 && player_idx == room.host){
+                            //     td.style.fontWeight = "bold";
+                            // }
                             tr.appendChild(td);
 
                             // // Connection fail
@@ -330,7 +328,7 @@
                     }
 
                     // Apply the room header text.
-                    room_header.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> – <span title="${detailed_uptime}">Uptime: ${final_time}${format}</span>\r\n${room_no_players} player${room_no_players == 1 ? "" : "s"} – ${joinable}`;
+                    room_header.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> – <span title="${detailed_uptime}">Uptime: ${final_time}${format}</span>\r\n${room_no_players} player${room_no_players == 1 ? "" : "s"} – <span class="${joinable_class}">${joinable}</span>`;
 
                 }
 
@@ -357,7 +355,7 @@
                     mii_data_list.push(img_element.getAttribute("mii-data"));
                 }
 
-                if (RELOAD) {
+                if (document.getElementById("timeout-checkbox").checked) {
                     if (RELOAD_TIMER){
                         clearInterval(RELOAD_TIMER);
                     }

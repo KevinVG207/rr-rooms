@@ -93,6 +93,14 @@ h1 {
     border-left: hidden;
 }
 
+.joinable {
+    color: green;
+}
+
+.not-joinable {
+    color: darkred;
+}
+
 @media (max-width: 720px) {
     body {
         font-size: 0.8rem;
