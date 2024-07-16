@@ -43,6 +43,7 @@
                         clearInterval(RELOAD_TIMER);
                     }
                 }
+                localStorage.setItem("auto-reload", document.getElementById("timeout-checkbox").checked);
             }
 
             // Miis are stored as key "mii_{data}": "[image, datetime]"
@@ -153,6 +154,7 @@
             async function autorun() {
                 console.log("Loading data...");
                 remove_expired_mii_images();
+                document.getElementById("timeout-checkbox").checked = localStorage.getItem("auto-reload") == "true";
 
                 const response = await fetch("https://umapyoi.net/api/v1/rr-rooms");
     
