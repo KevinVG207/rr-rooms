@@ -87,6 +87,11 @@ h1 {
     color: black;
 }
 
+.guest-td {
+    padding: 0.2rem;
+    border-left: hidden;
+}
+
 @media (max-width: 720px) {
     body {
         font-size: 0.8rem;

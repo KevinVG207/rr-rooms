@@ -188,7 +188,7 @@
                     // Room Info
                     let tr = document.createElement("tr");
                     let th = document.createElement("th");
-                    th.colSpan = 6;
+                    th.colSpan = 100;
                     th.classList.add("room-header");
                     let room_type = room.type == "anybody" ? "Public" : "Private";
                     let created = new Date(room.created);
@@ -214,6 +214,7 @@
                     // Mii Name
                     th = document.createElement("th");
                     th.textContent = "Mii Name";
+                    th.colSpan = 2;
                     tr.appendChild(th);
 
                     // Friend Code
@@ -245,55 +246,81 @@
 
                     // Players
                     for (const player_idx of Object.keys(room.players)) {
-                        no_players++;
+                        let mii_idx = 0;
+                        let no_miis = 1;
 
-                        tr = document.createElement("tr");
-                        tbody.appendChild(tr);
-                        
-                        const player = room.players[player_idx];
-
-                        // Mii Name
-                        let td = document.createElement("td");
-                        td.classList.add("mii-name");
-                        td.textContent = 'mii' in player ? player.mii[0].name : player.name;
-                        tr.appendChild(td);
-
-                        // Friend Code
-                        td = document.createElement("td");
-                        td.textContent = player.fc;
-                        if (player_idx == room.host){
-                            td.style.fontWeight = "bold";
+                        if ('mii' in room.players[player_idx]){
+                            no_miis = room.players[player_idx].mii.length;
                         }
-                        tr.appendChild(td);
 
-                        // Mii
-                            td = document.createElement("td");
-                            img = document.createElement("img");
-                            img.width = 64;
-                            img.height = 64;
-                            img.classList.add("mii");
-                            img.src = "empty.png";
-                            td.appendChild(img);
-                            tr.appendChild(td);
+                        for (let cur_mii_idx = 0; cur_mii_idx < no_miis; cur_mii_idx++){
+                            no_players++;
 
-                            if ('mii' in player){
-                                img.setAttribute("mii-data", player.mii[0].data);
+                            tr = document.createElement("tr");
+                            tbody.appendChild(tr);
+
+                            const player = room.players[player_idx];
+
+                            // Mii Name
+                            let td = document.createElement("td");
+                            td.colSpan = 2;
+                            let name_ele = td;
+
+                            if (cur_mii_idx > 0){
+                                name_ele = document.createElement("td");
+                                name_ele.classList.add("guest-name");
+                                td.classList.add("guest-td");
+                                td.colSpan = 1;
+                                name_ele.colSpan = 1;
                             }
 
-                        // Connection fail
-                        td = document.createElement("td");
-                        td.textContent = player.conn_fail;
-                        tr.appendChild(td);
+                            name_ele.classList.add("mii-name");
+                            name_ele.textContent = 'mii' in player ? player.mii[cur_mii_idx].name : player.name;
+                            tr.appendChild(td);
 
-                        // VR
-                        td = document.createElement("td");
-                        td.textContent = player.ev;
-                        tr.appendChild(td);
+                            if (cur_mii_idx > 0){
+                                tr.appendChild(name_ele);
+                            }
 
-                        // BR
-                        td = document.createElement("td");
-                        td.textContent = player.eb;
-                        tr.appendChild(td);
+                            // Friend Code
+                            td = document.createElement("td");
+                            td.textContent = cur_mii_idx == 0 ? player.fc : "Guest";
+                            if (player_idx == room.host){
+                                td.style.fontWeight = "bold";
+                            }
+                            tr.appendChild(td);
+
+                            // Mii
+                                td = document.createElement("td");
+                                img = document.createElement("img");
+                                img.width = 64;
+                                img.height = 64;
+                                img.classList.add("mii");
+                                img.src = "empty.png";
+                                td.appendChild(img);
+                                tr.appendChild(td);
+
+                                if ('mii' in player){
+                                    img.setAttribute("mii-data", player.mii[cur_mii_idx].data);
+                                }
+
+                            // Connection fail
+                            td = document.createElement("td");
+                            td.textContent = cur_mii_idx == 0 ? player.conn_fail : "--";
+                            tr.appendChild(td);
+
+                            // VR
+                            td = document.createElement("td");
+                            td.textContent = cur_mii_idx == 0 ? player.ev : "--";
+                            tr.appendChild(td);
+
+                            // BR
+                            td = document.createElement("td");
+                            td.textContent = cur_mii_idx == 0 ? player.eb : "--";
+                            tr.appendChild(td);
+                        }
+                        
+
                     }
 
                 }
