@@ -273,6 +273,10 @@
                                 td.classList.add("guest-td");
                                 td.colSpan = 1;
                                 name_ele.colSpan = 1;
+
+                                if (Object.keys(room.players).indexOf(player_idx) == Object.keys(room.players).length - 1 || cur_mii_idx < no_miis - 1){
+                                    name_ele.style.borderBottom = "hidden";
+                                }
                             }
 
                             name_ele.classList.add("mii-name");
