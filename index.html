@@ -33,6 +33,53 @@
             const RELOAD_TIME = 1000 * 10; // 10 seconds
             let RELOAD_TIMER = null;
 
+            let prev_uptime_update_date = null;
+            let uptimes_timer = null;
+
+            function update_uptimes(){
+                const time_spans = document.querySelectorAll("span[created]");
+
+                // Calculate days, hours, minutes and seconds since the room was created
+                // Uptime is a datetime string.
+                for (const time_span of time_spans){
+                    const created = new Date(time_span.getAttribute("created"));
+                    const now = new Date();
+                    const diff = now - created;
+
+                    let seconds = Math.floor(diff / 1000);
+                    let minutes = Math.floor(seconds / 60);
+                    let hours = Math.floor(minutes / 60);
+                    let days = Math.floor(hours / 24);
+
+                    hours = hours - (days * 24);
+                    minutes = minutes - (days * 24 * 60) - (hours * 60);
+                    seconds = seconds - (days * 24 * 60 * 60) - (hours * 60 * 60) - (minutes * 60);
+
+                    let padded_seconds = seconds.toString().padStart(2, "0");
+                    let padded_minutes = minutes.toString().padStart(2, "0");
+                    let padded_hours = hours.toString().padStart(2, "0");
+
+                    let str = `${hours}:${padded_minutes}:${padded_seconds}`;
+                    if (days > 0){
+                        str = `${days}:${padded_hours}:${padded_minutes}:${padded_seconds}`;
+                    }
+
+                    time_span.textContent = str;
+                }
+
+                var timeout_ms = 1000;
+                if (prev_uptime_update_date){
+                    timeout_ms -= (Date.now() - prev_uptime_update_date);
+                }
+
+                prev_uptime_update_date = Date.now();
+
+                if (uptimes_timer){
+                    clearTimeout(uptimes_timer);
+                }
+                uptimes_timer = setTimeout(update_uptimes, timeout_ms);
+            }
+
             function on_checkbox(){
                 if (document.getElementById("timeout-checkbox").checked){
                     if (RELOAD_TIMER){
@@ -191,16 +238,8 @@
                     room_header.colSpan = 100;
                     room_header.classList.add("room-header");
                     let room_type = room.type == "anybody" ? "🌎 Public" : "🔒 Private";
-                    let created = new Date(room.created);
-                    let minutes_since = Math.floor((Date.now() - created) / 60000);
-                    let hours_since = Math.floor(minutes_since / 60);
-                    let final_time = minutes_since;
-                    let format = "m"
-                    if (minutes_since >= 60) {
-                        format = "h"
-                        final_time = hours_since;
-                    }
-                    let detailed_uptime = `${hours_since}h ${minutes_since % 60}m`;
+
+
                     let joinable = room.suspend ? "Not joinable" : "Joinable";
                     let joinable_class = room.suspend ? "not-joinable" : "joinable";
 
@@ -332,7 +371,11 @@
                     }
 
                     // Apply the room header text.
-                    room_header.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> – <span title="${detailed_uptime}">Uptime: ${final_time}${format}</span>\r\n${room_no_players} player${room_no_players == 1 ? "" : "s"} – <span class="${joinable_class}">${joinable}</span>`;
+                    room_header.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> – Uptime: <span created="${room.created}"></span>\r\n${room_no_players} player${room_no_players == 1 ? "" : "s"} – <span class="${joinable_class}">${joinable}</span>`;
+                    if (uptimes_timer){
+                        clearInterval(uptimes_timer);
+                    }
+                    update_uptimes();
 
                 }
 
