@@ -36,7 +36,7 @@
             let prev_uptime_update_date = null;
             let uptimes_timer = null;
 
-            function update_uptimes(){
+            function update_uptimes(skip_reset = false){
                 const time_spans = document.querySelectorAll("span[created]");
 
                 // Calculate days, hours, minutes and seconds since the room was created
@@ -65,6 +65,10 @@
                     }
 
                     time_span.textContent = str;
+                }
+
+                if (skip_reset){
+                    return;
                 }
 
                 var timeout_ms = 1000;
@@ -371,11 +375,12 @@
                     }
 
                     // Apply the room header text.
+                    var skip_reset = false;
                     room_header.innerHTML = `${room_type} ${room.rk? room.rk.toUpperCase() + " " : ""}Room <a href="?room=${room.id}" class="room-link">${room.id}</a> – Uptime: <span created="${room.created}"></span>\r\n${room_no_players} player${room_no_players == 1 ? "" : "s"} – <span class="${joinable_class}">${joinable}</span>`;
                     if (uptimes_timer){
-                        clearInterval(uptimes_timer);
+                        skip_reset = true;
                     }
-                    update_uptimes();
+                    update_uptimes(skip_reset);
 
                 }
 
