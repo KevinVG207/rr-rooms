@@ -104,6 +104,10 @@ h1 {
     color: darkred;
 }
 
+tbody > tr:first-child {
+    border-top: hidden;
+}
+
 @media (max-width: 720px) {
     body {
         font-size: 0.8rem;
