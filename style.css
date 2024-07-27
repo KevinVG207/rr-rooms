@@ -29,6 +29,7 @@ th, td {
     text-align: center;
     border: 1px solid black;
     padding: 0 1rem;
+    line-height: 1.6rem;
 }
 
 .room-header {
