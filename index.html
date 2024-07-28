@@ -37,7 +37,6 @@
                 let new_rooms = [];
 
                 for (let room of rooms){
-                    console.log("Starting room");
                     const player_keys = Object.keys(room.players)
 
                     room.split = false;
@@ -70,10 +69,6 @@
                         }
                     }
 
-                    console.log(room.id);
-                    console.log(room.players);
-                    console.log(player_data);
-
                     let seen_players = [];
 
                     let sub_rooms = [];
@@ -82,8 +77,6 @@
                         if (seen_players.indexOf(i) != -1){
                             continue;
                         }
-
-                        console.log("aaaaa");
 
                         let new_room = JSON.parse(JSON.stringify(room));
                         new_room.players = {};
@@ -116,9 +109,6 @@
                         // Sort new_players_idx ascending.
                         new_players_idx.sort((a, b) => a - b);
 
-                        console.log("recursive add");
-                        console.log(new_players_idx);
-
                         for (const idx of new_players_idx){
                             new_room.players[player_keys[idx]] = room.players[player_keys[idx]];
                         }
@@ -140,7 +130,7 @@
 
             }
 
-            
+
             let prev_uptime_update_date = null;
             let uptimes_timer = null;
 
