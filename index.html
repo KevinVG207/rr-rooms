@@ -33,6 +33,219 @@
             const RELOAD_TIME = 1000 * 10; // 10 seconds
             let RELOAD_TIMER = null;
 
+            function fix_split_rooms(rooms){
+                let new_rooms = [];
+
+                for (let room of rooms){
+                    console.log("Starting room");
+                    const player_keys = Object.keys(room.players)
+
+                    room.split = false;
+
+                    // if (player_keys.length <= 13){
+                    //     new_rooms.push(room);
+                    //     continue;
+                    // }
+
+                    let player_data = [];
+
+                    for (let i = 0; i < player_keys.length; i++){
+                        player_data.push([]);
+                    }
+
+                    for (let i = 0; i < player_keys.length; i++){
+                        const player = room.players[player_keys[i]];
+                        const conn_map = player.conn_map;
+
+                        for (let j = 0; j < conn_map.length; j++){
+                            if (conn_map[j] != "0"){
+                                let their_idx = j;
+
+                                if (their_idx >= i){
+                                    their_idx += 1;
+                                }
+
+                                player_data[i].push(their_idx);
+                            }
+                        }
+                    }
+
+                    console.log(room.id);
+                    console.log(room.players);
+                    console.log(player_data);
+
+                    let seen_players = [];
+
+                    let sub_rooms = [];
+                    
+                    for (let i = 0; i < player_data.length; i++){
+                        if (seen_players.indexOf(i) != -1){
+                            continue;
+                        }
+
+                        console.log("aaaaa");
+
+                        let new_room = JSON.parse(JSON.stringify(room));
+                        new_room.players = {};
+
+                        let new_players_idx = [];
+
+                        let player_idx = i;
+
+                        function recursive_add(idx){
+                            if (seen_players.indexOf(idx) != -1){
+                                return;
+                            }
+
+                            seen_players.push(idx);
+
+                            let cur_connected = player_data[idx];
+                            for (const connected_idx of cur_connected){
+                                if (player_data[connected_idx].indexOf(idx) == -1){
+                                    // Ensure two-way connection.
+                                    continue;
+                                }
+                                recursive_add(connected_idx);
+                            }
+
+                            new_players_idx.push(idx);
+                        }
+
+                        recursive_add(player_idx);
+
+                        // Sort new_players_idx ascending.
+                        new_players_idx.sort((a, b) => a - b);
+
+                        console.log("recursive add");
+                        console.log(new_players_idx);
+
+                        for (const idx of new_players_idx){
+                            new_room.players[player_keys[idx]] = room.players[player_keys[idx]];
+                        }
+
+                        sub_rooms.push(new_room);
+
+                    }
+
+                    if (sub_rooms.length > 1){
+                        sub_rooms.forEach(room => room.split = true);
+                        new_rooms = new_rooms.concat(sub_rooms);
+                    } else {
+                        new_rooms.push(room);
+                    }
+
+                }
+
+                return new_rooms;
+
+            }
+
+                    // // let split_rooms = [[]];
+                    // let split_players = [];
+
+                    // console.log(room);
+
+                    // const players_keys = Object.keys(room.players);
+
+                    // for (let i = 0; i < players_keys.length; i++){
+                    //     split_players.push({
+                    //         idx: i,
+                    //         prev: null,
+                    //         next: null
+                    //     });
+                    // }
+
+                    // for (let i = 0; i < players_keys.length; i++){
+                    //     const player_data = split_players[i];
+
+                    //     if (i == 0){
+                    //         // split_rooms[0].push(i);
+                    //         // player_data.room_idx = 0;
+                    //         continue;
+                    //     }
+
+                    //     const player = room.players[players_keys[i]];
+                    //     console.log(player);
+                    //     const conn_map = player.conn_map;  // String. We only care about 0s.
+
+                    //     let placed = false;
+
+                    //     for (let j = 0; j < conn_map.length; j++){
+                    //         const conn = conn_map[j];
+                    //         if (conn != "0"){
+                    //             // Connected to this player.
+                    //             // debugger;
+                    //             let their_idx = j;
+                    //             if (their_idx >= i){
+                    //                 their_idx += 1;
+                    //             }
+
+                    //             debugger;
+
+                    //             // They're already in a room.
+                    //             let their_data = split_players[their_idx];
+                    //             // split_rooms[their_data.room_idx].push(i);
+                    //             // player_data.room_idx = their_data.room_idx;
+
+                    //             if (their_idx > i){
+                    //                 their_data.
+                    //             } else {
+                                    
+                    //             }
+
+                    //             placed = true;
+                    //             break;
+                    //         }
+                    //     }
+                    // }
+
+                    // console.log("Split players:");
+                    // console.log(split_players);
+
+                    // let seen_players = [];
+
+                    // for (let i = 0; i < split_players.length; i++){
+                    //     if (seen_players.indexOf(i) != -1){
+                    //         continue;
+                    //     }
+
+                    //     let new_room = JSON.parse(JSON.stringify(room));
+
+                    //     let new_players = {};
+
+                    //     let player_idx = i;
+
+                    //     while (player_idx != null){
+                    //         new_players[player_idx] = room.players[players_keys[player_idx]];
+                    //         seen_players.push(player_idx);
+                    //         player_idx = split_players[player_idx].next;
+                    //     }
+
+                    //     new_room.players = new_players;
+
+                    //     new_rooms.push(new_room);
+
+                    // }
+
+
+                    // // Now we have split the rooms. We need to create new room objects.
+                    // for (const split_room of split_rooms){
+                    //     let new_room = JSON.parse(JSON.stringify(room));
+
+                    //     let new_players = {};
+                    //     for (const player_idx of split_room){
+                    //         new_players[player_idx] = room.players[players_keys[player_idx]];
+                    //     }
+
+                    //     new_room.players = new_players;
+
+                    //     console.log("New room:");
+                    //     console.log(new_room);
+                    //     new_rooms.push(new_room);
+                    // }
+                // }
+
+
             let prev_uptime_update_date = null;
             let uptimes_timer = null;
 
@@ -216,7 +429,7 @@
                 }
 
 
-                const rooms = await response.json();
+                let rooms = await response.json();
                 let no_players = 0;
                 // console.log(rooms);
 
@@ -228,6 +441,9 @@
                 const params = url.searchParams;
                 const filter_room = params.get("room");
                 let room_not_found = true;
+
+                
+                rooms = fix_split_rooms(rooms);
 
 
                 for (const room of rooms) {
@@ -245,7 +461,14 @@
 
 
                     let joinable = room.suspend ? "Not joinable" : "Joinable";
+                    if (room.split) {
+                        joinable = "Split room";
+                    }
+
                     let joinable_class = room.suspend ? "not-joinable" : "joinable";
+                    if (room.split) {
+                        joinable_class = "split-room";
+                    }
 
                     let room_no_players = 0;
                     tr.appendChild(room_header);

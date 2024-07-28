@@ -105,6 +105,10 @@ h1 {
     color: darkred;
 }
 
+.split-room {
+    color: brown;
+}
+
 tbody > tr:first-child {
     border-top: hidden;
 }
