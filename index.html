@@ -15,8 +15,14 @@
     <body>
         <h1><a href="?" id="home-link">Retro Rewind Room Browser</a></h1>
         <div id="settings">
-            <label for="timeout-checkbox">Auto-refresh</label>
-            <input type="checkbox" id="timeout-checkbox" onchange="on_checkbox()" />
+            <div id="timeout-container">
+                <label for="timeout-checkbox">Auto-refresh</label>
+                <input type="checkbox" id="timeout-checkbox" onchange="on_checkbox()" />
+            </div>
+            <div id="fc-container">
+                <label for="fc-input">Highlight FC</label>
+                <input type="text" id="fc-input" placeholder="0000-0000-0000-0000" oninput="on_fc_change()" />
+            </div>
         </div>
         <div id="loading">Fetching data. Please wait...</div>
         <div id="top-container"><span>No. of rooms: <span id="no-rooms" class="top-stat">0</span></span><span>No. of players: <span id="no-players" class="top-stat">0</span></span></div>
@@ -32,6 +38,13 @@
             const EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 1 week
             const RELOAD_TIME = 1000 * 10; // 10 seconds
             let RELOAD_TIMER = null;
+            let cur_rooms = [];
+
+            function on_fc_change(){
+                const fc = document.getElementById("fc-input").value;
+                localStorage.setItem("highlight-fc", fc);
+                reload_rooms();
+            }
 
             function fix_split_rooms(rooms){
                 let new_rooms = [];
@@ -130,6 +143,39 @@
 
             }
 
+            function filter_fc(rooms){
+                // If the filter FC is found, place that room at the top.
+                const fc = localStorage.getItem("highlight-fc");
+
+                if (!fc){
+                    return rooms;
+                }
+
+                let new_rooms = [];
+
+                for (let i = 0; i < rooms.length; i++){
+                    const room = rooms[i];
+
+                    let found = false;
+
+                    for (const player_idx of Object.keys(room.players)){
+                        const player = room.players[player_idx];
+
+                        if (player.fc == fc){
+                            new_rooms.unshift(room);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found){
+                        new_rooms.push(room);
+                    }
+                }
+
+                return new_rooms;
+            }
+
 
             let prev_uptime_update_date = null;
             let uptimes_timer = null;
@@ -187,7 +233,7 @@
                     if (RELOAD_TIMER){
                         clearInterval(RELOAD_TIMER);
                     }
-                    RELOAD_TIMER = setInterval(autorun, RELOAD_TIME);
+                    RELOAD_TIMER = setInterval(fetch_rooms, RELOAD_TIME);
                 } else {
                     if (RELOAD_TIMER){
                         clearInterval(RELOAD_TIMER);
@@ -300,11 +346,15 @@
                 }
             }
 
+            async function on_load(){
+                document.getElementById("timeout-checkbox").checked = localStorage.getItem("auto-reload") == "true";
+                document.getElementById("fc-input").value = localStorage.getItem("highlight-fc") || "";
+                fetch_rooms();
+            }
 
-            async function autorun() {
+            async function fetch_rooms() {
                 console.log("Loading data...");
                 remove_expired_mii_images();
-                document.getElementById("timeout-checkbox").checked = localStorage.getItem("auto-reload") == "true";
 
                 const response = await fetch("https://umapyoi.net/api/v1/rr-rooms");
     
@@ -315,6 +365,13 @@
 
 
                 let rooms = await response.json();
+
+                cur_rooms = rooms;
+                reload_rooms();
+            }
+
+        async function reload_rooms(){
+                let rooms = cur_rooms;
                 let no_players = 0;
                 // console.log(rooms);
 
@@ -327,7 +384,7 @@
                 const filter_room = params.get("room");
                 let room_not_found = true;
 
-                
+                rooms = filter_fc(rooms);
                 rooms = fix_split_rooms(rooms);
 
 
@@ -461,6 +518,11 @@
                             // if (cur_mii_idx == 0 && player_idx == room.host){
                             //     td.style.fontWeight = "bold";
                             // }
+
+                            if (player.fc == localStorage.getItem("highlight-fc")){
+                                tr.classList.add("highlighted");
+                            }
+
                             tr.appendChild(td);
 
                             // // Connection fail
@@ -519,15 +581,15 @@
                     if (RELOAD_TIMER){
                         clearInterval(RELOAD_TIMER);
                     }
-                    RELOAD_TIMER = setInterval(autorun, RELOAD_TIME);
+                    RELOAD_TIMER = setInterval(fetch_rooms, RELOAD_TIME);
                 }
 
                 fetch_mii_images(mii_data_list);
 
             }
             if (document.addEventListener)
-                document.addEventListener('DOMContentLoaded', autorun, false)
-            else window.onload = autorun
+                document.addEventListener('DOMContentLoaded', on_load, false)
+            else window.onload = fetch_rooms
         </script>
     </body>
 </html>

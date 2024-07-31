@@ -84,6 +84,17 @@ h1 {
     margin-bottom: 0.5rem;
 }
 
+#settings {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.highlighted {
+    background-color: rgb(255, 255, 132);
+}
+
 #home-link {
     color: black;
 }
@@ -120,6 +131,11 @@ tbody > tr:first-child {
 
     #top-container {
         font-size: 0.8rem;
+    }
+
+    #settings {
+        flex-direction: column;
+        gap: 0;
     }
 
     table {
