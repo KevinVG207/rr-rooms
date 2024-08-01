@@ -132,6 +132,33 @@
 
                     if (sub_rooms.length > 1){
                         sub_rooms.forEach(room => room.split = true);
+
+                        let fc = document.getElementById("fc-input").value;
+                        if (fc){
+                            let tmp = [];
+                            for (let i = 0; i < sub_rooms.length; i++){
+                                const room = sub_rooms[i];
+
+                                let found = false;
+
+                                for (const player_idx of Object.keys(room.players)){
+                                    const player = room.players[player_idx];
+
+                                    if (player.fc == fc){
+                                        tmp.unshift(room);
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!found){
+                                    tmp.push(room);
+                                }
+                            }
+
+                            sub_rooms = tmp;
+                        }
+
                         new_rooms = new_rooms.concat(sub_rooms);
                     } else {
                         new_rooms.push(room);
