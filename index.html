@@ -134,7 +134,7 @@
                         sub_rooms.forEach((sub_room) => {
                             sub_room.split = true;
 
-                            if (sub_room.host in sub_room.players){
+                            if (Object.keys(room.players)[0] in sub_room.players){
                                 sub_room.split = false;
                             }
                         });
