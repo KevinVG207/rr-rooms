@@ -131,7 +131,13 @@
                     }
 
                     if (sub_rooms.length > 1){
-                        sub_rooms.forEach(room => room.split = true);
+                        sub_rooms.forEach((sub_room) => {
+                            sub_room.split = true;
+
+                            if (sub_room.host in sub_room.players){
+                                sub_room.split = false;
+                            }
+                        });
 
                         let fc = document.getElementById("fc-input").value;
                         if (fc){
