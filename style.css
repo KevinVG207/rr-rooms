@@ -158,4 +158,8 @@ tbody > tr:first-child {
     .conn-fail {
         font-size: 0.75rem;
     }
+
+    #loading {
+        font-size: 1.5rem;
+    }
 }
