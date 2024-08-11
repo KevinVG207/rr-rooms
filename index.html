@@ -40,6 +40,33 @@
             let RELOAD_TIMER = null;
             let cur_rooms = [];
 
+            function filter_mii_name(name){
+                // If a character is between 0xF103 and 0xF12F, place it within <span class="wide-char">
+                let new_name = "";
+                let special_char = false;
+                for (let i = 0; i < name.length; i++){
+                    const char_code = name.charCodeAt(i);
+                    if (char_code >= 0xF103 && char_code <= 0xF12F){
+                        if (!special_char){
+                            new_name += "<span class=\"wide-char\">";
+                            special_char = true;
+                        }
+                    } else {
+                        if (special_char){
+                            new_name += "</span>";
+                            special_char = false;
+                        }
+                    }
+                    new_name += name[i];
+                }
+
+                if (special_char){
+                    new_name += "</span>";
+                }
+
+                return new_name;
+            }
+
             function on_fc_change(){
                 const fc = document.getElementById("fc-input").value;
                 localStorage.setItem("highlight-fc", fc);
@@ -523,7 +550,7 @@
                             }
 
                             name_ele.classList.add("mii-name");
-                            name_ele.textContent = 'mii' in player ? player.mii[cur_mii_idx].name : player.name;
+                            name_ele.innerHTML = filter_mii_name('mii' in player ? player.mii[cur_mii_idx].name : player.name);
                             tr.appendChild(td);
 
                             if (cur_mii_idx > 0){

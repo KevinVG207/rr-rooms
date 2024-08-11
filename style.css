@@ -53,6 +53,11 @@ th, td {
     font-family: 'CTMKF', sans-serif;
 }
 
+.wide-char {
+    font-family: 'CTMKF', sans-serif;
+    font-size: 0.8rem;
+}
+
 .data-header {
     background-color: lightgray;
 }
@@ -161,5 +166,9 @@ tbody > tr:first-child {
 
     #loading {
         font-size: 1.5rem;
+    }
+
+    .wide-char {
+        font-size: 0.5rem;
     }
 }
