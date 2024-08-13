@@ -60,7 +60,9 @@ th, td {
 
 .wide-char {
     font-family: 'CTMKF', sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.5rem;
+    transform: scaleY(2);
+    display: inline-block;
 }
 
 .data-header {
@@ -182,6 +184,6 @@ tbody > tr:first-child {
     }
 
     .wide-char {
-        font-size: 0.5rem;
+        font-size: 0.3rem;
     }
 }
