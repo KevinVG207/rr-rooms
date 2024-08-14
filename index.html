@@ -555,7 +555,7 @@
                             }
 
                             name_ele.classList.add("mii-name");
-                            name_ele.innerHTML = _escape(filter_mii_name('mii' in player ? player.mii[cur_mii_idx].name : player.name));
+                            name_ele.innerHTML = filter_mii_name(_escape('mii' in player ? player.mii[cur_mii_idx].name : player.name));
                             tr.appendChild(td);
 
                             if (cur_mii_idx > 0){
