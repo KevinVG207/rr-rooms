@@ -45,6 +45,10 @@
             }
 
             function filter_mii_name(name){
+                if (name.length > 10){
+                    name = name.substring(0, 10);
+                }
+
                 // If a character is between 0xF103 and 0xF12F, place it within <span class="wide-char">
                 let new_name = "";
                 let special_char = false;
