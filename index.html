@@ -31,6 +31,10 @@
                 <label for="fc-input">Highlight FC</label>
                 <input type="text" id="fc-input" placeholder="0000-0000-0000-0000" oninput="on_fc_change()" />
             </div>
+            <div id="darkmode-container">
+                <label for="darkmode-checkbox">Dark Mode</label>
+                <input type="checkbox" id="darkmode-checkbox" onchange="on_darkmode_change()" />
+            </div>
             <div id="history-container">
                 <button onclick="add_history(-60)">-1h</button>
                 <button onclick="add_history(-1)">-1m</button>
@@ -65,6 +69,7 @@
             let RELOAD_TIMER = null;
             let cur_rooms = [];
             let FIRST_LOAD = true;
+            let DARK_MODE = false;
 
             // Source: https://github.com/patchzyy/WheelWizard
             const ROOM_TYPES = {
@@ -568,7 +573,40 @@
                 }
             }
 
+            function load_darkmode() {
+                let enabled = localStorage.getItem("dark-mode");
+                if (enabled == null){
+                    enabled = false;
+                } else {
+                    enabled = enabled == "true";
+                }
+                DARK_MODE = enabled;
+                document.getElementById("darkmode-checkbox").checked = DARK_MODE;
+                update_darkmode();
+            }
+
+            function on_darkmode_change() {
+                DARK_MODE = document.getElementById("darkmode-checkbox").checked;
+                localStorage.setItem("dark-mode", DARK_MODE);
+                update_darkmode();
+            }
+
+            function update_darkmode() {
+                let darkmode_link = document.head.querySelector('link[href="./dark-style.css"]');
+                if (DARK_MODE && !darkmode_link){
+                    darkmode_link = document.createElement("link");
+                    darkmode_link.rel = "stylesheet";
+                    darkmode_link.type = "text/css";
+                    darkmode_link.href = "./dark-style.css";
+                    document.head.appendChild(darkmode_link);
+                } else if (!DARK_MODE && darkmode_link){
+                    document.head.removeChild(darkmode_link);
+                }
+            }
+
             async function on_load(){
+                load_darkmode();
+
                 document.getElementById("timeout-checkbox").checked = localStorage.getItem("auto-reload") == "true";
                 document.getElementById("fc-input").value = localStorage.getItem("highlight-fc") || "";
                 let priv = localStorage.getItem("show-private");
