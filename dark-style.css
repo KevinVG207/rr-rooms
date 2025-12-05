@@ -1,0 +1,57 @@
+body {
+  background-color: #181A1B;
+  color: #E8E6E3;
+}
+
+#home-link {
+  color: #E8E6E3;
+}
+
+.room-link {
+  color: #E8E6E3;
+}
+
+.joinable {
+  color: #72FF72;
+}
+
+.not-joinable {
+  color: #FF6B6B;
+}
+
+.data-header {
+  background-color: #313537;
+}
+
+table {
+  border: 1px solid #808080;
+}
+
+th, td {
+  border: 1px solid #808080;
+}
+
+.guest-td {
+  border-left: hidden;
+}
+
+tbody > tr:first-child {
+  border-top: hidden;
+}
+
+.room-header {
+  border-left: hidden;
+  border-right: hidden;
+}
+
+a {
+  color: #E8E6E3;
+}
+
+a:visited {
+  color: #CCC;
+}
+
+.highlighted {
+  color: #000000
+}
