@@ -78,7 +78,7 @@ th, td {
     padding: 0 0.4rem;
 }
 
-#loading {
+.load-warning {
     font-weight: bold;
     font-size: 2rem;
 }
@@ -216,7 +216,7 @@ tbody > tr:first-child {
         font-size: 0.75rem;
     }
 
-    #loading {
+    .load-warning {
         font-size: 1.5rem;
     }
 

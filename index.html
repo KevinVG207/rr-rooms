@@ -47,7 +47,8 @@
                 <button onclick="disable_history()">Back to Live</button>
             </div>
         </div>
-        <div id="loading">Fetching data. Please wait...</div>
+        <div id="loading" class="load-warning">Fetching data. Please wait...</div>
+        <div id="no-data" class="load-warning">No history data for selected date.</div>
         <div id="top-container"><span>No. of rooms: <span id="no-rooms" class="top-stat">0</span></span><span>No. of players: <span id="no-players" class="top-stat">0</span></span></div>
         <div id="not-found-container">
             Specified room has closed or does not exist.
@@ -678,7 +679,16 @@
                 const response = await fetch("https://umapyoi.net/api/v1/rr-rooms" + timestamp_part);
     
                 if (!response.ok){
-                    console.log("Error fetching room data from zplwii.xyz");
+                    console.log("Error fetching room data from umapyoi.net/api/v1/rr-rooms");
+                    return;
+                }
+
+
+                document.querySelector("#no-data").style.display = "none";
+                if (response.status == 204){
+                    document.querySelector("#no-data").style.display = "block";
+                    document.querySelector("#loading").style.display = "none";
+                    console.log("No data received");
                     return;
                 }
 
