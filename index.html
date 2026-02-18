@@ -64,7 +64,7 @@
             let HISTORY_TIMER = null;
             let HISTORY_MODE = false;
             let HISTORY_DATE = null;
-            const MAX_MIIS_PER_REQUEST = 24;
+            // const MAX_MIIS_PER_REQUEST = 24;
             const EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 1 week
             const RELOAD_TIME = 1000 * 10; // 10 seconds
             let RELOAD_TIMER = null;
@@ -530,49 +530,49 @@
                 }
             }
 
-            async function fetch_mii_images(mii_data_list){
-                // Fetch Mii images
-                let new_mii_data_list = [];
+            // async function fetch_mii_images(mii_data_list){
+            //     // Fetch Mii images
+            //     let new_mii_data_list = [];
 
-                // Handle cached images
-                for (const mii_data of mii_data_list){
-                    let mii_image = get_cached_mii_image(mii_data);
+            //     // Handle cached images
+            //     for (const mii_data of mii_data_list){
+            //         let mii_image = get_cached_mii_image(mii_data);
 
-                    if (mii_image){
-                        // Apply cached image
-                        apply_mii_image(mii_data, mii_image);
-                    } else {
-                        // Fetch new image
-                        new_mii_data_list.push(mii_data);
-                    }
-                }
+            //         if (mii_image){
+            //             // Apply cached image
+            //             apply_mii_image(mii_data, mii_image);
+            //         } else {
+            //             // Fetch new image
+            //             new_mii_data_list.push(mii_data);
+            //         }
+            //     }
 
-                if (new_mii_data_list.length > MAX_MIIS_PER_REQUEST){
-                    const mii_data_list_copy = new_mii_data_list.slice();
-                    new_mii_data_list = mii_data_list_copy.splice(0, MAX_MIIS_PER_REQUEST);
-                    fetch_mii_images(mii_data_list_copy);
-                }
+            //     if (new_mii_data_list.length > MAX_MIIS_PER_REQUEST){
+            //         const mii_data_list_copy = new_mii_data_list.slice();
+            //         new_mii_data_list = mii_data_list_copy.splice(0, MAX_MIIS_PER_REQUEST);
+            //         fetch_mii_images(mii_data_list_copy);
+            //     }
 
-                if (new_mii_data_list.length > 0){
-                    const mii_data_response = await fetch("https://umapyoi.net/api/v1/mii", {
-                        method: "POST",
-                        body: JSON.stringify(new_mii_data_list)
-                    });
+            //     if (new_mii_data_list.length > 0){
+            //         const mii_data_response = await fetch("https://umapyoi.net/api/v1/mii", {
+            //             method: "POST",
+            //             body: JSON.stringify(new_mii_data_list)
+            //         });
 
-                    if (!mii_data_response.ok){
-                        console.log("Error fetching Mii data from umapyoi.net");
-                        return;
-                    }
+            //         if (!mii_data_response.ok){
+            //             console.log("Error fetching Mii data from umapyoi.net");
+            //             return;
+            //         }
 
-                    const mii_dict = await mii_data_response.json();
+            //         const mii_dict = await mii_data_response.json();
 
-                    // console.log(mii_dict);
+            //         // console.log(mii_dict);
 
-                    for (const mii_data of Object.keys(mii_dict)){
-                        apply_mii_image(mii_data, mii_dict[mii_data]);
-                    }
-                }
-            }
+            //         for (const mii_data of Object.keys(mii_dict)){
+            //             apply_mii_image(mii_data, mii_dict[mii_data]);
+            //         }
+            //     }
+            // }
 
             function load_darkmode() {
                 let enabled = localStorage.getItem("dark-mode");
@@ -855,9 +855,9 @@
                             img = document.createElement("img");
                             img.width = 64;
                             img.height = 64;
-                            img.alt = "Mii";
+                            img.alt = "";
                             img.classList.add("mii");
-                            img.src = "empty.png";
+                            img.src = `https://mii-unsecure.ariankordi.net/miis/image.png?erri=syxws-rlc&data=${encodeURIComponent(player.mii[cur_mii_idx].data)}&shaderType=switch&type=face&width=96`;
                             td.appendChild(img);
                             tr.appendChild(td);
 
@@ -944,11 +944,11 @@
                 // document.querySelector(".room-header").style.borderTop = "hidden";
 
                 // Fetch Mii images
-                let mii_data_list = [];
+                // let mii_data_list = [];
 
-                for (const img_element of document.querySelectorAll("img[mii-data]")){
-                    mii_data_list.push(img_element.getAttribute("mii-data"));
-                }
+                // for (const img_element of document.querySelectorAll("img[mii-data]")){
+                //     mii_data_list.push(img_element.getAttribute("mii-data"));
+                // }
 
                 if (document.getElementById("timeout-checkbox").checked) {
                     if (RELOAD_TIMER){
@@ -962,7 +962,7 @@
                     }
                 }
 
-                fetch_mii_images(mii_data_list);
+                // fetch_mii_images(mii_data_list);
 
             }
             if (document.addEventListener)
