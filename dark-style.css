@@ -59,3 +59,7 @@ a:visited {
 #history-indicator {
   background-color: #313537;
 }
+
+.hover-tooltip {
+    color: darkgray;
+}
