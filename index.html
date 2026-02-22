@@ -162,8 +162,6 @@
             }
 
             function handle_mii_name(name){
-                name = _escape(name);
-
                 if (FILTER_MII_NAMES) {
                     if (name.length > 10){
                         name = name.substring(0, 10);
@@ -172,7 +170,7 @@
                     name = filter_mii_name(name);
                 }
 
-                return name;
+                return _escape(name);
             }
             
             function char_code_is_wide(char_code){
