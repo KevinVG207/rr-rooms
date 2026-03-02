@@ -167,10 +167,9 @@
                         name = name.substring(0, 10);
                     }
                     name = replace_non_allowed(name);
-                    name = filter_mii_name(name);
                 }
 
-                return _escape(name);
+                return filter_mii_name(_escape(name));
             }
             
             function char_code_is_wide(char_code){
