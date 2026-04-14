@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="./style.css" type="text/css" />
         <link href="./ctmkf.css" rel="Stylesheet" type="text/css" />
         <meta name="google-site-verification" content="7kba7_shX35iAz3yKPc03miKG_00vGt1IUr8dia-UhY" />
+        <script src="./mii-to-studio.js"></script>
     </head>
     <body>
         <h1><a href="?" id="home-link">Retro Rewind Room Browser</a></h1>
@@ -64,6 +65,7 @@
         <p><a href="https://wiki.tockdom.com/wiki/Retro_Rewind" target="_blank">Retro Rewind</a> is a custom track distribution for Mario Kart Wii, created by ZPL.</p>
         <p>This webpage is created by <a href="https://github.com/KevinVG207" target="_blank">KevinVG207</a></p>
         <p>Room data taken from <a href="http://rwfc.net/api/groups" target="_blank">this API endpoint</a>.</p>
+        <p>Thanks to <a href="https://github.com/ariankordi" target="_blank">ariankordi</a> for providing the <a href="https://github.com/ariankordi/mii-fusion-experiments/blob/main/MiiToStudio/MiiToStudio.fu" target="_blank">Mii to Studio converter</a>.</p>
         <p><a href="https://wiki.tockdom.com/wiki/CTMKF" target="_blank">Chadderz's Terrible Mario Kart Font</a> is used for the Mii name special symbols.</p>
         <script type="text/javascript">
             let HISTORY_TIMER = null;
@@ -639,6 +641,12 @@
                 }
             }
 
+            function make_mii_url(mii_data) {
+                converter = new MiiToStudio();
+                converter.fromWiiData(Uint8Array.fromBase64(mii_data))
+                return converter.getImageUrl(96, false)
+            }
+
             async function on_load(){
                 load_darkmode();
 
@@ -906,10 +914,10 @@
                             td.appendChild(img);
                             tr.appendChild(td);
 
-                            // if ('mii' in player){
-                            //     img.src = `https://mii-unsecure.ariankordi.net/miis/image.png?erri=syxws-rlc&data=${encodeURIComponent(player.mii[cur_mii_idx].data)}&shaderType=switch&type=face&width=96`;
-                            //     img.setAttribute("mii-data", player.mii[cur_mii_idx].data);
-                            // }
+                            if ('mii' in player){
+                                img.src = make_mii_url(player.mii[cur_mii_idx].data);
+                                img.setAttribute("mii-data", player.mii[cur_mii_idx].data);
+                            }
 
                             // Friend Code
                             td = document.createElement("td");
